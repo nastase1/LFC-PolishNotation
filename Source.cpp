@@ -15,13 +15,33 @@ int prioritate(char op) {
     return -1;
 }
 
+bool verificaParanteze(const std::string& expresie) {
+    std::stack<char> paranteze;
+    for (char c : expresie) {
+        if (c == '(') {
+            paranteze.push(c);
+        }
+        else if (c == ')') {
+            if (paranteze.empty()) {
+                return false; 
+            }
+            paranteze.pop();
+        }
+    }
+    return paranteze.empty(); 
+}
+
 std::string FormaPoloneza(std::string& expresie) {
     std::string fp;
     std::stack<char> operatori;
-    for (int i = 0; i < expresie.size(); ++i) {
+
+    if (!verificaParanteze(expresie)) {
+        return "Eroare: Parantezele sunt plasate incorect!";
+    }
+
+    for (size_t i = 0; i < expresie.size(); ++i) {
         char curent = expresie[i];
 
-        
         if (isalnum(curent)) {
             fp.push_back(curent);
 
@@ -65,6 +85,7 @@ int main() {
     std::ifstream f("fisier.in");
     f >> expresie;
     std::cout << "Expresia este: " << expresie << "\n";
-    std::cout << "Expresia dupa forma normala poloneza: " << FormaPoloneza(expresie) << "\n";
+    std::string rezultat = FormaPoloneza(expresie);
+    std::cout << "Expresia dupa forma normala poloneza: " << rezultat << "\n";
     return 0;
 }
